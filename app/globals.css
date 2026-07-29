@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+/* ─── Brand design tokens ─── */
+@theme {
+  /* Colors */
+  --color-noir: #0a0a0a;
+  --color-parchment: #f5f0e8;
+  --color-gold: #c9a96e;
+  --color-espresso: #1c1612;
+  --color-ash: #6b6560;
+  --color-linen: #e2dad0;
+  --color-cream: #fdfaf5;
+
+  /* Typography — next/font injects --font-cormorant and --font-dmsans at runtime */
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-dmsans), "DM Sans", system-ui, sans-serif;
+
+  /* Shadows */
+  --shadow-card: 0 2px 12px rgba(10, 10, 10, 0.06);
+  --shadow-card-hover: 0 8px 32px rgba(10, 10, 10, 0.12);
+  --shadow-modal: 0 24px 64px rgba(10, 10, 10, 0.3);
+  --shadow-gold: 0 0 0 1px rgba(201, 169, 110, 0.4);
+
+  /* shadcn/ui compatibility variables */
+  --background: var(--color-parchment);
+  --foreground: var(--color-espresso);
+  --muted: oklch(0.96 0.01 60);
+  --muted-foreground: var(--color-ash);
+  --border: var(--color-linen);
+  --input: var(--color-linen);
+  --ring: var(--color-gold);
+  --radius: 0.125rem;
+}
+
+/* ─── Base resets ─── */
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--color-parchment);
+    color: var(--color-espresso);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100dvh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    display: block;
+  }
+
+  ::selection {
+    background-color: var(--color-gold);
+    color: var(--color-noir);
+  }
+
+  /* Visible keyboard-focus indicator across all interactive elements.
+     Mouse users don't see it (:focus-visible), keyboard users always do. */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+    border-radius: 1px;
+  }
+}
+
+/* ─── Accessibility: honor reduced-motion at the CSS layer ───
+   Complements Framer Motion's useReducedMotion for non-JS transitions,
+   animations, and smooth scrolling. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
