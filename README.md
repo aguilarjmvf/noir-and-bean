@@ -30,7 +30,6 @@ The design language is _"Kinfolk magazine meets specialty roaster"_: warm parchm
 | **Pages** | Home · Shop · About · Journal · Contact |
 | **Type** | Static marketing site (no server data) |
 | **Status** | Complete — SEO‑optimized and accessibility‑reviewed |
-| **Design source** | [`BRAND_GUIDE.md`](BRAND_GUIDE.md) · [`CONTENT.md`](CONTENT.md) · [`IMAGE_GUIDE.md`](IMAGE_GUIDE.md) |
 
 ---
 
