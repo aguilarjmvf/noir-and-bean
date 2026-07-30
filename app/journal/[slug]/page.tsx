@@ -7,6 +7,7 @@ import { Container } from "@/components/shared/Container";
 import { Badge } from "@/components/shared/Badge";
 import { BlogCard } from "@/components/shared/BlogCard";
 import { POSTS, getPostBySlug, getRelatedPosts } from "@/lib/data/posts";
+import { SITE_URL, SITE_NAME } from "@/lib/site";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -32,14 +33,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: `${post.title} | Noir & Bean`,
       description,
       url: `/journal/${slug}`,
-      images: [{ url: post.image }],
+      images: [{ url: post.image, width: 1000, height: 750, alt: post.title }],
       publishedTime: post.date,
       authors: [post.author],
     },
     twitter: {
       title: `${post.title} | Noir & Bean`,
       description,
-      images: [post.image],
+      images: [{ url: post.image, alt: post.title }],
     },
   };
 }
@@ -59,8 +60,42 @@ export default async function ArticlePage({ params }: PageProps) {
 
   const related = getRelatedPosts(slug);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        headline: post.title,
+        description: post.subtitle ?? post.excerpt,
+        image: post.image,
+        author: { "@type": "Person", name: post.author },
+        publisher: {
+          "@type": "Organization",
+          name: SITE_NAME,
+          logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.svg` },
+        },
+        datePublished: post.date,
+        dateModified: post.date,
+        mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/journal/${slug}` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: "Journal", item: `${SITE_URL}/journal` },
+          { "@type": "ListItem", position: 3, name: post.title },
+        ],
+      },
+    ],
+  };
+
   return (
-    <article className="bg-parchment">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <article className="bg-parchment">
       {/* Header */}
       <header className="pt-28 md:pt-32">
         <Container narrow>
@@ -177,5 +212,6 @@ export default async function ArticlePage({ params }: PageProps) {
         </section>
       )}
     </article>
+    </>
   );
 }

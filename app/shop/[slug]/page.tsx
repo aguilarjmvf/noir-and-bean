@@ -12,6 +12,7 @@ import {
   getProductBySlug,
   getRelatedProducts,
 } from "@/lib/data/products";
+import { SITE_URL, SITE_NAME } from "@/lib/site";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -28,6 +29,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const description = `${product.tastingNotes} A ${product.roast.toLowerCase()} roast from ${product.origin}${product.elevation ? `, grown at ${product.elevation}` : ""}.`;
 
+  const ogAlt = `${product.name} — ${product.origin}`;
+
   return {
     title: product.name,
     description,
@@ -36,12 +39,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: `${product.name} | Noir & Bean`,
       description,
       url: `/shop/${slug}`,
-      images: [{ url: product.image }],
+      images: [{ url: product.image, width: 600, height: 800, alt: ogAlt }],
     },
     twitter: {
       title: `${product.name} | Noir & Bean`,
       description,
-      images: [product.image],
+      images: [{ url: product.image, alt: ogAlt }],
     },
   };
 }
@@ -61,8 +64,42 @@ export default async function ProductPage({ params }: PageProps) {
     ["Harvest", product.harvest],
   ];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Product",
+        name: product.name,
+        description: product.description ?? product.tastingNotes,
+        image: product.image,
+        brand: { "@type": "Brand", name: SITE_NAME },
+        offers: {
+          "@type": "Offer",
+          url: `${SITE_URL}/shop/${slug}`,
+          priceCurrency: "USD",
+          price: product.price.toFixed(2),
+          availability: "https://schema.org/InStock",
+          seller: { "@type": "Organization", name: SITE_NAME },
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: "Shop", item: `${SITE_URL}/shop` },
+          { "@type": "ListItem", position: 3, name: product.name },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* Detail */}
       <section aria-label={product.name} className="bg-parchment pt-28 pb-24 md:pt-32">
         <Container>

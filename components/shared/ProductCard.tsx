@@ -96,7 +96,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
             href={href}
             className="font-sans text-[10px] uppercase tracking-widest text-ash hover:text-espresso transition-colors underline-offset-4 hover:underline"
           >
-            View
+            View<span className="sr-only"> {name}</span>
           </Link>
         </div>
       </div>

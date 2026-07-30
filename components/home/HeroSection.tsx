@@ -18,7 +18,7 @@ export function HeroSection() {
   return (
     <section
       aria-label="Hero"
-      className="relative min-h-screen flex items-end bg-noir overflow-hidden"
+      className="relative min-h-dvh flex items-end bg-noir overflow-hidden"
     >
       {/* Background image + layered gradient */}
       <div className="absolute inset-0 z-0">
