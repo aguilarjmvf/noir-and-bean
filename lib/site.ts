@@ -6,7 +6,8 @@
  * or production domain); the fallback is the brand's implied domain.
  */
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://noirandbean.com";
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://noirandbean.com");
 
 export const SITE_NAME = "Noir & Bean";
 
